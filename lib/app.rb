@@ -33,7 +33,7 @@ def fighter_hand (hand)
   return current_hand
 end
 
-def compare_stats(player_poke, cpt_poke)
+def compare_stats(player_poke, cpt_poke, match_results)
   player_health = (cpt_poke["attack"].to_i - player_poke["defense"].to_i)
   cpt_health = (player_poke["attack"].to_i - cpt_poke["defense"].to_i)
   # puts player_health
@@ -41,22 +41,48 @@ def compare_stats(player_poke, cpt_poke)
   puts puts
   if player_health > cpt_health
     puts "Tu lui as fait mordre la poussière ! Bon travail :-)"
+    match_results[0] += 1
   elsif player_health < cpt_health
     puts "Tu t'es fait rosser comme un noob, retourne bosser !"
-  else puts "Vos parents vous forcent à faire la paix et à vous serrer la main, tu te promets de le battre la prochaine fois dans l'esprit shonen."
+    match_results[1] += 1
+  else 
+    puts "Vos parents vous forcent à faire la paix et à vous serrer la main, tu te promets de le battre la prochaine fois dans l'esprit shonen."
+    match_results[2] += 1
   end
   sleep 1.5
   system('clear')
+  return match_results
 end
 
 def display_poke(poke)
   puts "#{poke[:pokemon_name].capitalize} : FORCE(#{poke["attack"]}) | DÉFENSE(#{poke["defense"]})"
 end
 
+def wins_report (match_results)
+  system('clear')
+  if match_results[0] == 3
+    puts "          Tes pokémons l'ont emporté #{match_results[0]} fois. Tu es déjà le meilleur dresseur ;)"
+  else
+    puts "          Tes pokémons l'ont emporté #{match_results[0]} fois. Un jour tu seras (peut-être...) le meilleur dresseur :/"
+  end
+  puts puts
+  if match_results[1] == 3
+    puts "          Ceux de l'ordinateur t'ont mis #{match_results[1]} bonnes corrections. Tes pokémons seraient mieux chez la Team Rocket"
+  else
+    puts "          Ceux de l'ordinateur t'ont mis #{match_results[1]} bonnes corrections."
+  end
+  puts puts 
+  if match_results[2] >=2
+    puts "          Vous avez fait #{match_results[2]} égalité. Vous êtes des BFF en devenir :)"
+  else
+    puts "          Et vous avez fait #{match_results[2]} égalité."
+  end
+end
+
 def game_start(func)
   hand_player = func.slice(0, 3)
   computer_player = func.slice(3, func.size - 1)
-
+  match_results = [0, 0, 0]
   while hand_player.length > 0
     puts puts
     puts "Voici ton équipe"
@@ -74,13 +100,19 @@ def game_start(func)
     position = gets.chomp.to_i
     pl_curr_fight = hand_player[position - 1]
 
-    compare_stats(pl_curr_fight, cpt_curr_fight)
+    match_results = compare_stats(pl_curr_fight, cpt_curr_fight, match_results)
     hand_player.delete_at(position - 1)
     computer_player.delete_at(position_computer_poke)
   end
+  wins_report(match_results)
 end
-puts puts
-puts "Hahaha je suis Sacha du bourg Palette, je te défie !!! Pikachu attaque éclair !!!"
-puts puts
-sleep 1.5
-game_start(fighter_hand(get_cards(random_6_number)))
+
+def process
+  puts puts
+  puts "Hahaha je suis Sacha du bourg Palette, je te défie !!! Pikachu attaque éclair !!!"
+  puts puts
+  sleep 1.5
+  game_start(fighter_hand(get_cards(random_6_number)))
+end
+
+process
