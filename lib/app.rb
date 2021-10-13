@@ -18,10 +18,9 @@ end
 def welcome()
   puts puts
   puts "Hahaha je suis Sacha du bourg Palette, je te défie !!!" 
-  sleep 1
+  sleep 0.5
   puts "Pikachu attaque éclair !!!"
   puts puts
-  sleep 0.5
 end
 
 def create_hand(nb_cards) # returns a random HAND of pokemons
@@ -29,10 +28,6 @@ def create_hand(nb_cards) # returns a random HAND of pokemons
   nb_cards.times do hand.push(api_get_pokemon( rand(1..99) )) end
   hand.map {|i| get_poke_stats(i)}
 end
-
-
-
-
 
 def display_poke(poke)
   puts "#{poke[:pokemon_name].capitalize} : FORCE(#{poke["attack"]}) | DÉFENSE(#{poke["defense"]})"
@@ -80,39 +75,44 @@ def wins_report (match_results)
 end
 
 
-def game_start()
+def game()
   player_hand = create_hand(3)
   computer_hand = create_hand(3)
   match_results = [0, 0, 0]
 
   while player_hand.length > 0
-    puts "Voici ton équipe"
-    player_hand.each {|pokemon| display_poke(pokemon)}
-    position_computer_poke = rand(0..computer_hand.length - 1)
-    cpt_curr_fight = computer_hand[position_computer_poke]
-    puts puts
-    puts "Tu vas affronter : "
-    puts display_poke(cpt_curr_fight)
-    puts puts
-    puts "Choisis un poke, mec, en entrant sa position dans ton terminal de geek :"
-    player_hand.each_with_index do |x, i|
-      puts "Fighter: type #{i + 1} for #{x[:pokemon_name].capitalize}"
-    end
-    position = gets.chomp.to_i
-    pl_curr_fight = player_hand[position - 1]
 
-    match_results = compare_stats(pl_curr_fight, cpt_curr_fight, match_results)
-    player_hand.delete_at(position - 1)
-    computer_hand.delete_at(position_computer_poke)
+    puts "Voici ton équipe"
+    player_hand.each {|poke| display_poke(poke)}
+    puts puts
+    sleep 0.5
+
+    computer_poke_position = rand(0..computer_hand.length - 1)
+    fighting_computer_poke = computer_hand[computer_poke_position]
+    puts "Tu vas affronter ..."
+    puts display_poke(fighting_computer_poke)
+    puts puts
+    sleep 1
+
+    puts "Choisis un poke, mec! Entre sa position dans ton terminal de geek!"
+    player_hand.each_with_index do |poke, i| 
+      puts "#{i + 1} : fight with #{poke[:pokemon_name].capitalize}"
+    end
+    player_poke_position = gets.chomp.to_i - 1
+    fighting_player_poke = player_hand[player_poke_position]
+
+    match_results = compare_stats(fighting_player_poke, fighting_computer_poke, match_results)
+    player_hand.delete_at(player_poke_position)
+    computer_hand.delete_at(computer_poke_position)
   end
+
   wins_report(match_results)
 end
 
 def process
   system('clear')
   welcome
-  game_start
-  results
+  game
 end
 
 process
