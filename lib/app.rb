@@ -1,8 +1,14 @@
 require 'poke-api-v2'
 
+def welcome()
+  puts puts
+  puts "Hahaha je suis Sacha du bourg Palette, je te défie !!!" 
+  sleep 0.5
+  puts "Pikachu attaque éclair !!!"
+  puts puts
+end
 
-
-def api_get_pokemon(id) # returns a POKEMON OBJECT via its id number
+def api_get_poke(id) # returns a POKEMON OBJECT via its id number
   return PokeApi.get(pokemon: id)
 end
 
@@ -14,18 +20,9 @@ def get_poke_stats(poke) # returns a HASH of the stats of a pokemon
   }
 end
 
-
-def welcome()
-  puts puts
-  puts "Hahaha je suis Sacha du bourg Palette, je te défie !!!" 
-  sleep 0.5
-  puts "Pikachu attaque éclair !!!"
-  puts puts
-end
-
 def create_hand(nb_cards) # returns a random HAND of pokemons
   hand = Array.new
-  nb_cards.times do hand.push(api_get_pokemon( rand(1..99) )) end
+  nb_cards.times do hand.push(api_get_poke( rand(1..99) )) end
   hand.map {|i| get_poke_stats(i)}
 end
 
@@ -48,30 +45,23 @@ def compare_stats(player_poke, cpt_poke, match_results)
     match_results[2] += 1
   end
   sleep 1.5
-  system('clear')
   return match_results
 end
 
 def wins_report (match_results)
-  system('clear')
-
   if match_results[0] == 3
-    puts "          Tes pokémons l'ont emporté #{match_results[0]} fois. Tu es déjà le meilleur dresseur ;)"
-  else
-    puts "          Tes pokémons l'ont emporté #{match_results[0]} fois. Un jour tu seras (peut-être...) le meilleur dresseur :/"
-  end
+    puts "Tes pokémons l'ont emporté #{match_results[0]} fois. Tu es déjà le meilleur dresseur ;)"
+  else puts "Tes pokémons l'ont emporté #{match_results[0]} fois. Un jour tu seras (peut-être...) le meilleur dresseur :/" end
   puts puts
+
   if match_results[1] == 3
-    puts "          Ceux de l'ordinateur t'ont mis #{match_results[1]} bonnes corrections. Tes pokémons seraient mieux chez la Team Rocket"
-  else
-    puts "          Ceux de l'ordinateur t'ont mis #{match_results[1]} bonnes corrections."
-  end
+    puts "Ceux de l'ordinateur t'ont mis #{match_results[1]} bonnes corrections. Tes pokémons seraient mieux chez la Team Rocket"
+  else puts "Ceux de l'ordinateur t'ont mis #{match_results[1]} bonnes corrections." end
   puts puts 
+
   if match_results[2] >= 2
-    puts "          Vous avez fait #{match_results[2]} égalité. Vous êtes des BFF en devenir :)"
-  else
-    puts "          Et vous avez fait #{match_results[2]} égalité."
-  end
+    puts "Vous avez fait #{match_results[2]} égalité. Vous êtes des BFF en devenir :)"
+  else puts "Et les égalités sont au nombre de #{match_results[2]}." end
 end
 
 
@@ -104,6 +94,7 @@ def game()
     match_results = compare_stats(fighting_player_poke, fighting_computer_poke, match_results)
     player_hand.delete_at(player_poke_position)
     computer_hand.delete_at(computer_poke_position)
+    system("clear")
   end
 
   wins_report(match_results)
