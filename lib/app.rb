@@ -51,35 +51,17 @@ def delete_3_pokemon(hand)
   end
 end
 
-# puts "hand player"
- hand_player = get_cards(random_6_number)
-# display_hands(hand_player)
-# # puts hand_player
-# puts "hand computer"
-# hand_computer = get_cards(random_6_number)
-# display_hands (hand_computer)
+hand_player = get_cards(random_6_number)
+computer_hand = get_cards(random_6_number)
+
+
 
 puts "choice 3 from 6 pokemon"
 
 delete_3_pokemon(hand_player)
-display_hands (hand_player)
+display_hands(hand_player)
 
-# pikachu = PokeApi.get(pokemon: 121)
+puts hand_player[0].stats[]
 
 
 
-# p pikachu.stats[0].stat.name
-
-# puts "stats"
-# pikachu.stats.each do |i|
-#   print i.stat.name + " : " + i.base_stat.to_s + "|"
-# end
-
-# puts puts
-
-# puts  "Abilities"
-# pikachu.abilities.each do |i|
-#   print i.ability.name  + "|"
-# end
-# puts
-# p pikachu.methods
