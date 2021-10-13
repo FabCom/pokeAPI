@@ -1,21 +1,12 @@
 require 'poke-api-v2'
 
-def random_6_number
-  array = Array.new
-  6.times do
-    array.push(rand(1..100))
-  end
-  return array
-end
-
-def get_cards array
+def create_hand(nb_pokemons)
   hand = Array.new
-  array.length.times do |i|
-    hand.push(PokeApi.get(pokemon: array[i]))
-  end
+  nb_pokemons.times do hand.push(get_random_pokemon()) end
   return hand
 end
 
+<<<<<<< HEAD
 def get_pokemon_stats (poke_object)
   poke_stats = {
     "pokemon_name": poke_object.name,
@@ -29,10 +20,26 @@ def fighter_hand (hand)
   current_hand = []
   hand.each do |i|
     current_hand.push(get_pokemon_stats(i))
+=======
+def get_random_pokemon()
+  return PokeApi.get(pokemon: rand(1..100))
+end
+
+def get_stats(pokemon)
+  pokemon.stats.each do |i| print i.stat.name + ":" + i.base_stat.to_s + " | " end
+  puts
+end
+
+def display_hand(hand)
+  hand.each do |i|
+    print i.name+": "
+    get_stats(i)
+>>>>>>> 0d7a0bdbc05aad816372c96389146665fcf55360
   end
   return current_hand
 end
 
+<<<<<<< HEAD
 def compare_stats(player_poke, cpt_poke)
   player_health = (cpt_poke["attack"].to_i - player_poke["defense"].to_i)
   cpt_health = (player_poke["attack"].to_i - cpt_poke["defense"].to_i)
@@ -65,5 +72,16 @@ end
 
 puts "Hahaha je suis Sacha du bourg Palette, je te défie !!! Pikachu attaque éclair !!!"
 game_start(fighter_hand(get_cards(random_6_number)))
+=======
+puts "Player's HAND"
+player_hand = create_hand(3)
+display_hand(player_hand)
+puts
+puts "Computer's HAND"
+# Creates and displays the hand of the computer
+computer_hand = create_hand(3)
+display_hand(computer_hand)
+
+>>>>>>> 0d7a0bdbc05aad816372c96389146665fcf55360
 
 
