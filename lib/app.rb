@@ -1,41 +1,31 @@
 require 'poke-api-v2'
 
-def random_6_number
-  array = Array.new
-  6.times do
-    array.push(rand(1..100))
-  end
-  return array
+def api_get_pokemon(id) # returns a POKEMON OBJECT via its id number
+  return PokeApi.get(pokemon: id)
 end
 
-def get_cards array
+def create_hand(nb_cards) # returns a random HAND
   hand = Array.new
-  array.length.times do |i|
-    hand.push(PokeApi.get(pokemon: array[i]))
-  end
+  nb_cards.times do hand.push(api_get_pokemon( rand(1..99) )) end
   return hand
 end
 
-def get_pokemon_stats (poke_object)
-  poke_stats = {
-    "pokemon_name": poke_object.name,
-    "#{poke_object.stats[1].stat.name}" => poke_object.stats[1].base_stat,
-    "#{poke_object.stats[2].stat.name}" => poke_object.stats[2].base_stat
+def get_pokemon_stats(pokemon) # returns a HASH of the stats of a pokemon
+  { 
+    "pokemon_name": pokemon.name,
+    "#{pokemon.stats[1].stat.name}" => pokemon.stats[1].base_stat,
+    "#{pokemon.stats[2].stat.name}" => pokemon.stats[2].base_stat
   }
-  return poke_stats
 end
 
-def fighter_hand (hand)
-  current_hand = []
-  hand.each do |i|
-    current_hand.push(get_pokemon_stats(i))
-  end
-  return current_hand
+def fighter_hand (nb_cards) # 
+  hand = create_hand(nb_cards)
+  hand.map {|i| get_pokemon_stats(i)}
 end
 
 def compare_stats(player_poke, cpt_poke, match_results)
-  player_health = (cpt_poke["attack"].to_i - player_poke["defense"].to_i)
-  cpt_health = (player_poke["attack"].to_i - cpt_poke["defense"].to_i)
+  player_health = (player_poke["defense"] - cpt_poke["attack"])
+  cpt_health = (cpt_poke["defense"] - player_poke["attack"])
   # puts player_health
   # puts cpt_health
   puts puts
@@ -60,6 +50,7 @@ end
 
 def wins_report (match_results)
   system('clear')
+
   if match_results[0] == 3
     puts "          Tes pokémons l'ont emporté #{match_results[0]} fois. Tu es déjà le meilleur dresseur ;)"
   else
@@ -72,17 +63,18 @@ def wins_report (match_results)
     puts "          Ceux de l'ordinateur t'ont mis #{match_results[1]} bonnes corrections."
   end
   puts puts 
-  if match_results[2] >=2
+  if match_results[2] >= 2
     puts "          Vous avez fait #{match_results[2]} égalité. Vous êtes des BFF en devenir :)"
   else
     puts "          Et vous avez fait #{match_results[2]} égalité."
   end
 end
 
-def game_start(func)
-  hand_player = func.slice(0, 3)
-  computer_player = func.slice(3, func.size - 1)
+def game_start()
+  hand_player = fighter_hand(3)
+  computer_player = fighter_hand(3)
   match_results = [0, 0, 0]
+
   while hand_player.length > 0
     puts puts
     puts "Voici ton équipe"
@@ -109,10 +101,10 @@ end
 
 def process
   puts puts
-  puts "Hahaha je suis Sacha du bourg Palette, je te défie !!! Pikachu attaque éclair !!!"
+  puts "Hahaha je suis Sacha du bourg Palette, je te défie !!! Pikachu attaque éclair !!!" 
   puts puts
   sleep 1.5
-  game_start(fighter_hand(get_cards(random_6_number)))
+  game_start()
 end
 
 process
