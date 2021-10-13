@@ -1,67 +1,35 @@
 require 'poke-api-v2'
 
-def random_6_number
-  array = Array.new
-  6.times do
-    array.push(rand(1..100))
-  end
-  return array
-end
-
-def get_cards array
+def create_hand(nb_pokemons)
   hand = Array.new
-  array.length.times do |i|
-    hand.push(PokeApi.get(pokemon: array[i]))
-  end
+  nb_pokemons.times do hand.push(get_random_pokemon()) end
   return hand
 end
 
-def display_pokemon (object_pokemon)
-  puts object_pokemon.name
+def get_random_pokemon()
+  return PokeApi.get(pokemon: rand(1..100))
 end
 
-def get_pokemon_stats (object_pokemon)
-  object_pokemon.stats.each do |i|
-    print i.stat.name + " : " + i.base_stat.to_s + "|" 
-  end
+def get_stats(pokemon)
+  pokemon.stats.each do |i| print i.stat.name + ":" + i.base_stat.to_s + " | " end
   puts
 end
 
-def display_hands (hand)
+def display_hand(hand)
   hand.each do |i|
-  display_pokemon(i)
-  get_pokemon_stats(i)
+    print i.name+": "
+    get_stats(i)
   end
 end
 
-def delete_pokemon (hand, number_pokemon)
-  hand.delete_at(number_pokemon - 1)
-end
-
-def delete_3_pokemon(hand)
-  puts "Choissisez parmis les 6 pokemon, 3 pokemon a retirer"
-  
-  while hand.length != 3
-    input = gets.chomp.to_i
-    while (input > hand.length && input < 1)
-      puts "Choisissez parmis 1 et #{hand.length}}"
-      input = gets.chomp.to_i
-    end
-    delete_pokemon(hand, input)
-  end
-end
-
-hand_player = get_cards(random_6_number)
-computer_hand = get_cards(random_6_number)
-
-
-
-puts "choice 3 from 6 pokemon"
-
-delete_3_pokemon(hand_player)
-display_hands(hand_player)
-
-puts hand_player[0].stats[]
+puts "Player's HAND"
+player_hand = create_hand(3)
+display_hand(player_hand)
+puts
+puts "Computer's HAND"
+# Creates and displays the hand of the computer
+computer_hand = create_hand(3)
+display_hand(computer_hand)
 
 
 
