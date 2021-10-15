@@ -1,11 +1,16 @@
 require 'poke-api-v2'
 
-def welcome()
+def display_ascii_art
+  art = File.read("#{__dir__}/../src/ascii_art.txt").split("\n")
+  art.each do |line| puts line ; sleep 0.1 end
   puts puts
-  puts "Hahaha je suis Sacha du bourg Palette, je te défie !!!" 
-  sleep 0.5
-  puts "Pikachu attaque éclair !!!"
-  puts puts
+  sleep 1.5
+  system ('clear')
+end
+
+def display_ascii_art_light
+  art = File.read("#{__dir__}/../src/ascii_art_2.txt")
+  puts art
 end
 
 def api_get_poke(id) # returns a POKEMON OBJECT via its id number
@@ -64,14 +69,15 @@ def wins_report (match_results)
   else puts "Et les égalités sont au nombre de #{match_results[2]}." end
 end
 
-
 def game()
+
   player_hand = create_hand(3)
   computer_hand = create_hand(3)
   match_results = [0, 0, 0]
 
   while player_hand.length > 0
 
+    display_ascii_art_light
     puts "Voici ton équipe"
     player_hand.each {|poke| display_poke(poke)}
     puts puts
@@ -102,7 +108,7 @@ end
 
 def process
   system('clear')
-  welcome
+  display_ascii_art
   game
 end
 
